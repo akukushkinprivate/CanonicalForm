@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CanonicalForm", "CanonicalForm\CanonicalForm.csproj", "{924481E0-A127-48B9-AC08-66E681E14158}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CanonicalForm.Tests", "CanonicalForm.Tests\CanonicalForm.Tests.csproj", "{970D97C4-A180-4E8F-B790-7BC3FC6C24F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{924481E0-A127-48B9-AC08-66E681E14158}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{924481E0-A127-48B9-AC08-66E681E14158}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{924481E0-A127-48B9-AC08-66E681E14158}.Release|Any CPU.Build.0 = Release|Any CPU
+		{970D97C4-A180-4E8F-B790-7BC3FC6C24F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{970D97C4-A180-4E8F-B790-7BC3FC6C24F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{970D97C4-A180-4E8F-B790-7BC3FC6C24F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{970D97C4-A180-4E8F-B790-7BC3FC6C24F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
