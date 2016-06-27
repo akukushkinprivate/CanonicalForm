@@ -1,6 +1,9 @@
-﻿namespace CanonicalForm
+﻿namespace MathematicalModel
 {
-    internal class Varible
+    /// <summary>
+    /// Varible
+    /// </summary>
+    public class Varible
     {
         /// <summary>
         /// Degree
@@ -11,15 +14,5 @@
         /// Name
         /// </summary>
         public char Name { get; set; }
-
-        public Varible(int degree, char name)
-        {
-            Degree = degree;
-            Name = name;
-        }
-
-        public Varible()
-        {
-        }
     }
 }

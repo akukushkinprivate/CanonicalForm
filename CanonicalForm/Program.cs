@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace CanonicalForm
 {
@@ -10,6 +7,23 @@ namespace CanonicalForm
     {
         static void Main(string[] args)
         {
+            try
+            {
+                using (var sr = new StreamReader("TestFile.txt"))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        var parser = new ParserEquation.ParserEquation(line);
+                        parser.Parse();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }

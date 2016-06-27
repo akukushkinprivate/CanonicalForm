@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CanonicalForm
+namespace MathematicalModel
 {
-    internal class Monomial
+    /// <summary>
+    /// Monomial
+    /// </summary>
+    public class Monomial
     {
         /// <summary>
         /// Coefficient
