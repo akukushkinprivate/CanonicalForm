@@ -15,7 +15,18 @@ namespace CanonicalForm
                     while ((line = sr.ReadLine()) != null)
                     {
                         var parser = new ParserEquation.ParserEquation(line);
-                        parser.Parse();
+                        var root = parser.Parse();
+                        var canonicalForm = root.ToCanonicalForm();
+                        foreach (var monomial in canonicalForm)
+                        {
+                            Console.Write(monomial.Сoefficient);
+                            foreach (var varible in monomial.Varibles)
+                            {
+                                Console.Write(varible.Name + "^" + varible.Degree);
+                            }
+                            Console.WriteLine();
+                        }
+                        Console.WriteLine("/========================/");
                     }
                 }
             }

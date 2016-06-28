@@ -12,7 +12,21 @@ namespace ParserEquation
         private int _currentPosition;
 
         /// <summary>
-        /// Returns value symbol on current position, if current position is out of range index then returns char.MinValue
+        /// Get or set current position
+        /// </summary>
+        public int CurrentPosition
+        {
+            get { return _currentPosition; }
+            set { _currentPosition = value >= 0 || value < _stringLength ? value : 0; }
+        }
+
+        /// <summary>
+        /// Get contained string
+        /// </summary>
+        public string String => _string;
+
+        /// <summary>
+        /// Get value symbol on current position, if current position is out of range index then returns char.MinValue
         /// </summary>
         public char CurrentSymbol
         {

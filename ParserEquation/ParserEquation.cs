@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using MathematicalModel;
 
@@ -9,27 +8,58 @@ namespace ParserEquation
     /// Parser of equation string
     /// </summary>
     public class ParserEquation
+        : Error
     {
+        private const string EquotionStringNullMessage = "Equotion string is null.";
+        private const string IncrorrectFormatEquotionStringMessage = "Incorrect format equotion string.";
         private readonly StringContainer _stringContainer;
-        private int _currentSign;
 
         public ParserEquation(string equotionString)
         {
             if (equotionString == null)
             {
-                throw new ArgumentNullException(nameof(equotionString));
+                SetError(EquotionStringNullMessage);
+                return;
             }
             _stringContainer = new StringContainer(equotionString);
-            _currentSign = 1;
         }
 
         public TreeNode Parse()
         {
+            var signEqualityPosition = _stringContainer.String.IndexOf('=');
+            if (signEqualityPosition < 0)
+            {
+                SetError(IncrorrectFormatEquotionStringMessage);
+                return null;
+            }
+
+            var beforeEqual = ParseFrom();
+            var afterEqual = ParseFrom(signEqualityPosition);
+            if (IsError)
+            {
+                return null;
+            }
+            afterEqual.Data.Сoefficient = -afterEqual.Data.Сoefficient;
+
+            var root = new TreeNode { Data = new Monomial { Сoefficient = 1.0 } };
+            root.Childs.Add(beforeEqual);
+            root.Childs.Add(afterEqual);
+            return root;
+        }
+
+        private TreeNode ParseFrom(int position = 0)
+        {
+            _stringContainer.CurrentPosition = position;
             var root = new TreeNode { Data = new Monomial { Сoefficient = 1.0 } };
             var currentNode = root;
 
-            while (_stringContainer.CurrentSymbol != char.MinValue)
+            while (IsNeedContinueParse())
             {
+                if (currentNode == null)
+                {
+                    SetError(IncrorrectFormatEquotionStringMessage);
+                    return null;
+                }
                 var monomial = GetMonomial();
                 var addedNode = new TreeNode { Data = monomial };
                 currentNode.Childs.Add(addedNode);
@@ -44,27 +74,32 @@ namespace ParserEquation
                     while (IsNeedUpLevel())
                     {
                         _stringContainer.PopCurrentSymbol();
-                        if (currentNode.Parent == null)
+                        if (currentNode?.Parent == null)
                         {
+                            SetError(IncrorrectFormatEquotionStringMessage);
                             return null;
                         }
                         currentNode = currentNode.Parent;
                     }
                 }
-                if (!IsNeedChangeSign())
-                {
-                    continue;
-                }
                 _stringContainer.PopCurrentSymbol();
-                _currentSign = -_currentSign;
+            }
+            if (!root.Equals(currentNode))
+            {
+                SetError(IncrorrectFormatEquotionStringMessage);
             }
 
-            return root.Equals(currentNode) ? root : null;
+            return !IsError ? root : null;
         }
 
-        private bool IsNeedChangeSign()
+        private bool IsNeedContinueParse()
         {
-            return _stringContainer.CurrentSymbol == '=';
+            if (_stringContainer.CurrentSymbol != '=')
+            {
+                return _stringContainer.CurrentSymbol != char.MinValue && IsError;
+            }
+            _stringContainer.PopCurrentSymbol();
+            return false;
         }
 
         private bool IsNeedUpLevel()
@@ -117,7 +152,8 @@ namespace ParserEquation
                 }
                 else
                 {
-                    throw new Exception();
+                    SetError(IncrorrectFormatEquotionStringMessage);
+                    return null;
                 }
             }
             else
@@ -147,7 +183,7 @@ namespace ParserEquation
 
             number = TryGetNumber(out number) ? number : 1.0;
 
-            return _currentSign * sign * number;
+            return sign * number;
         }
 
         private bool TryGetNumber(out double number)
