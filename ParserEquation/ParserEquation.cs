@@ -24,17 +24,21 @@ namespace ParserEquation
             _stringContainer = new StringContainer(equotionString);
         }
 
+        /// <summary>
+        /// Parse
+        /// </summary>
+        /// <returns>Root of euqotion tree</returns>
         public TreeNode Parse()
         {
             var signEqualityPosition = _stringContainer.String.IndexOf('=');
-            if (signEqualityPosition < 0)
+            if (signEqualityPosition < 0) 
             {
                 SetError(IncrorrectFormatEquotionStringMessage);
                 return null;
             }
 
             var beforeEqual = ParseFrom();
-            var afterEqual = ParseFrom(signEqualityPosition);
+            var afterEqual = ParseFrom(signEqualityPosition + 1); // + 1 - next position after '='
             if (IsError)
             {
                 return null;
@@ -82,7 +86,6 @@ namespace ParserEquation
                         currentNode = currentNode.Parent;
                     }
                 }
-                _stringContainer.PopCurrentSymbol();
             }
             if (!root.Equals(currentNode))
             {
@@ -96,7 +99,7 @@ namespace ParserEquation
         {
             if (_stringContainer.CurrentSymbol != '=')
             {
-                return _stringContainer.CurrentSymbol != char.MinValue && IsError;
+                return _stringContainer.CurrentSymbol != char.MinValue && !IsError;
             }
             _stringContainer.PopCurrentSymbol();
             return false;

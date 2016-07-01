@@ -36,6 +36,39 @@ namespace MathematicalModel
             };
         }
 
+        /// <summary>
+        /// Check similar monomials
+        /// </summary>
+        /// <param name="monomial">Compared monomial</param>
+        /// <returns>If monomials are similar return true else false</returns>
+        public bool IsSimilar(Monomial monomial)
+        {
+            var cnt = new Dictionary<Varible, int>();
+            foreach (var varible in Varibles)
+            {
+                if (cnt.ContainsKey(varible))
+                {
+                    cnt[varible]++;
+                }
+                else
+                {
+                    cnt.Add(varible, 1);
+                }
+            }
+            foreach (var varible in monomial.Varibles)
+            {
+                if (cnt.ContainsKey(varible))
+                {
+                    cnt[varible]--;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return cnt.Values.All(c => c == 0);
+        }
+
         private static IList<Varible> MultiplieVaribles(IList<Varible> aVaribles, IList<Varible> bVaribles)
         {
             if (aVaribles == null) throw new ArgumentNullException(nameof(aVaribles));

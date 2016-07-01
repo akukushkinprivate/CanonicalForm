@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MathematicalModel
@@ -8,6 +9,8 @@ namespace MathematicalModel
     /// </summary>
     public class TreeNode
     {
+        private const double Tolerance = 0.00001;
+
         /// <summary>
         /// Monomial data
         /// </summary>
@@ -28,13 +31,17 @@ namespace MathematicalModel
             Childs = new List<TreeNode>();
         }
 
-        public List<Monomial> ToCanonicalForm()
+        /// <summary>
+        /// Transform tree node to canonical form
+        /// </summary>
+        /// <returns>List of monomials</returns>
+        public IList<Monomial> ToCanonicalForm()
         {
             var monomialList = new List<Monomial>();
 
             if (!Childs.Any())
             {
-                monomialList.Add(Data);
+                AddMonomial(monomialList, Data);
                 return monomialList;
             }
 
@@ -45,10 +52,35 @@ namespace MathematicalModel
                 {
                     childMonimials[i] *= Data;
                 }
-                monomialList.AddRange(childMonimials);
+                AddMonomials(monomialList, childMonimials);
             }
 
             return monomialList;
+        }
+
+        private static void AddMonomials(List<Monomial> monomialList, IEnumerable<Monomial> addedMonomialList)
+        {
+            foreach (var childMonimial in addedMonomialList)
+            {
+                AddMonomial(monomialList, childMonimial);
+            }
+        }
+
+        private static void AddMonomial(List<Monomial> monomialList, Monomial monomial)
+        {
+            var findedSimilarMonomial = monomialList.Find(m => m.IsSimilar(monomial));
+            if (findedSimilarMonomial != null)
+            {
+                findedSimilarMonomial.Сoefficient += monomial.Сoefficient;
+                if (Math.Abs(findedSimilarMonomial.Сoefficient) < Tolerance)
+                {
+                    monomialList.Remove(findedSimilarMonomial);
+                }
+            }
+            else
+            {
+                monomialList.Add(monomial);
+            }
         }
     }
 }

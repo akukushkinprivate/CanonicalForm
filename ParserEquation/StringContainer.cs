@@ -17,7 +17,7 @@ namespace ParserEquation
         public int CurrentPosition
         {
             get { return _currentPosition; }
-            set { _currentPosition = value >= 0 || value < _stringLength ? value : 0; }
+            set { _currentPosition = value >= 0 || value < _stringLength ? value : _stringLength; }
         }
 
         /// <summary>
